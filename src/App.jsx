@@ -39,7 +39,7 @@ function App() {
 
   return (
     <>
-      <h1>Game Hunter</h1> 
+      <h1>Steam Discounts Tracker</h1> 
       <Routes>
         <Route path="/" element={<TrackerPage trackerList={trackerList} removeTrackingItem={removeTrackingItem}/>}/>
         <Route path="/search" element={<SearchPage addTrackingItem={addTrackingItem}/>}/>
