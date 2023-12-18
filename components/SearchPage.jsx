@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useParams } from "react-router-dom";
 import GameItem from './GameItem';
 
-export default function SearchPage(){
+export default function SearchPage({ addTrackingItem }){
     const [dailyDealList, setDailyDealList] = useState([])
 
     useEffect(() => {
@@ -20,7 +20,7 @@ export default function SearchPage(){
             <Link to="/">
                 <button>Home</button>
             </Link>
-            {dailyDealList.map((deal) => (<GameItem key={deal.gameId} item={deal}/>))}
+            {dailyDealList.map((deal) => (<GameItem key={deal.gameID} item={deal} isTracked={false} btnFunction={addTrackingItem}/>))}
         </div>
     )
 }
