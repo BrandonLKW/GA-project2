@@ -13,7 +13,7 @@ export default function SearchPage({ addTrackingItem }){
     useEffect(() => {
         //load daily dails as initial landing page
         async function loadSearch(){
-        setDealList(await getDailyDeals());
+            setDealList(await getDailyDeals());
         }
         loadSearch();
     }, [])
@@ -43,7 +43,6 @@ export default function SearchPage({ addTrackingItem }){
             filterStrArray.push("lowerPrice=" + lowerPriceInput + "&upperPrice=" + upperPriceInput);
         }
         if (filterStrArray.length > 0){
-            console.log(filterStrArray.join("&"));
             setDealList(await getFilteredDeals(filterStrArray.join("&")));
         }
     };

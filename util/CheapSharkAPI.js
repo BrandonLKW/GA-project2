@@ -13,3 +13,10 @@ export async function getFilteredDeals(filter){
     const list = await response.json();
     return list;
 }
+
+export async function getGameDetails(gameId){
+    const detailsUrl = url + "/games?id=" + gameId;
+    const response = await fetch(detailsUrl);
+    const list = await response.json();
+    return list;
+}
