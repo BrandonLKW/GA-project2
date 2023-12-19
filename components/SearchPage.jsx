@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import GameItem from './GameItem';
 import { getDailyDeals, getFilteredDeals } from '../util/CheapSharkAPI.js'
 
-export default function SearchPage({ addTrackingItem }){
+export default function SearchPage({ addTrackingItem, removeTrackingItem, checkIfTracked}){
     const [dealList, setDealList] = useState([])
     const [titleInput, setTitleInput] = useState("");
     const [usePriceFilter, setUsePriceFilter] = useState(false);
@@ -71,7 +71,7 @@ export default function SearchPage({ addTrackingItem }){
             </Link>
             <hr />
             <h2>Deals:</h2>
-            {dealList.map((deal) => (<GameItem key={deal.gameID} item={deal} isTracked={false} btnFunction={addTrackingItem}/>))}
+            {dealList.map((deal) => (<GameItem key={deal.gameID} item={deal} isTracked={checkIfTracked(deal.gameID)} btnFunction={checkIfTracked(deal.gameID) ? removeTrackingItem : addTrackingItem}/>))}
         </div>
     )
 }

@@ -17,7 +17,9 @@ export async function addItem(item){
         fields: {
             "title": item.title,
             "salePrice": item.salePrice,
-            "normalPrice": item.normalPrice
+            "normalPrice": item.normalPrice,
+            "gameID": item.gameID,
+            "thumb": item.thumb
         },
     };
     const response = await fetch(url, {

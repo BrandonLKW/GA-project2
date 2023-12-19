@@ -13,6 +13,7 @@ function App() {
       setTrackerList(await getTrackerList());
     }
     loadList();
+    console.log("fire main app");
   }, [])
 
   function addTrackingItem(item){
@@ -21,6 +22,12 @@ function App() {
       setTrackerList([newItem, ...trackerList]);
     }
     add();
+  }
+
+  function checkIfTracked(gameID){
+    trackerList.forEach((item) => {
+    })
+    return (trackerList.some((game) => game.fields.gameID === gameID));
   }
 
   function removeTrackingItem(item){
@@ -41,8 +48,9 @@ function App() {
     <>
       <h1>Steam Discounts Tracker</h1> 
       <Routes>
-        <Route path="/" element={<TrackerPage trackerList={trackerList} removeTrackingItem={removeTrackingItem}/>}/>
-        <Route path="/search" element={<SearchPage addTrackingItem={addTrackingItem}/>}/>
+        <Route path="/" element={<TrackerPage trackerList={trackerList} removeTrackingItem={removeTrackingItem} checkIfTracked={checkIfTracked}/>}/>
+        <Route path="/search" element={<SearchPage addTrackingItem={addTrackingItem} removeTrackingItem={removeTrackingItem} checkIfTracked={checkIfTracked}/>}/>
+        <Route path="/search/:searchStr" element={<SearchPage addTrackingItem={addTrackingItem}/>}/>
       </Routes>
     </>
   )

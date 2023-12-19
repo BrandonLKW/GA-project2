@@ -1,16 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { getGameDetails } from '../util/CheapSharkAPI.js'
 
 export default function GameItem({ item, isTracked, btnFunction }){
     const [gameDetails, setGameDetails] = useState({});
-
-    useEffect(() => {
-        console.log(gameDetails);
-    }, []);
-
+    
     const onDlgBtnClick = async () => {
         const response = await getGameDetails(item.gameID);
-        console.log(response);
         setGameDetails(response);
 
         const dialog = document.querySelector("#modal-" + item.gameID);
@@ -27,7 +22,7 @@ export default function GameItem({ item, isTracked, btnFunction }){
             <p>{`Title: ${item.title}`}</p>
             <p>{`Sale Price: ${item.salePrice}`}</p>
             <p>{`Normal Price: ${item.normalPrice}`}</p>
-            <p>{`Steam Rating: ${item.steamRatingText} - ${item.steamRatingPercent}%`}</p>
+            {!isTracked && <p>{`Steam Rating: ${item.steamRatingText} - ${item.steamRatingPercent}%`}</p>}
             <img src={item.thumb}></img>
             {<button onClick={() => btnFunction(item)}>{isTracked ? "Remove" : "Track"}</button>}
             <button onClick={onDlgBtnClick}>More Details</button>
@@ -37,8 +32,7 @@ export default function GameItem({ item, isTracked, btnFunction }){
                     <p>{`Title: ${item.title}`}</p>
                     <img src={item.thumb}></img>
                     {gameDetails?.deals?.map((detail) => {
-                        return <div>
-                                    <p>test</p>
+                        return <div key={detail.gameID}>
                                     <p>{`Store: ${detail.storeID}`}</p>
                                     <p>{`Sale Price: ${detail.price}`}</p>
                                     <p>{`Normal Price: ${detail.retailPrice}`}</p>
