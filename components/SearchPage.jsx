@@ -1,5 +1,6 @@
+import { Button, Container } from 'react-bootstrap'
 import { useState, useEffect } from 'react'
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import GameItem from './GameItem';
 import { getDailyDeals, getFilteredDeals } from '../util/CheapSharkAPI.js'
 
@@ -48,7 +49,7 @@ export default function SearchPage({ addTrackingItem, removeTrackingItem, checkI
     };
 
     return (
-        <div>
+        <Container>
             <div>
                 <label>
                     Filter by Title: <input name="titleInput" value={titleInput} onChange={handleTitleInputEvent}/>
@@ -64,14 +65,14 @@ export default function SearchPage({ addTrackingItem, removeTrackingItem, checkI
                     Filter by price range? <input value={usePriceFilter} type="checkbox" onChange={handlePriceFilterFlag}/>
                 </label>
                 
-                <button onClick={searchFilter}>Search</button>
+                <Button onClick={searchFilter}>Search</Button>
             </div>
             <Link to="/">
-                <button>Home</button>
+                <Button>Home</Button>
             </Link>
             <hr />
             <h2>Deals:</h2>
             {dealList.map((deal) => (<GameItem key={deal.gameID} item={deal} isTracked={checkIfTracked(deal.gameID)} btnFunction={checkIfTracked(deal.gameID) ? removeTrackingItem : addTrackingItem}/>))}
-        </div>
+        </Container>
     )
 }

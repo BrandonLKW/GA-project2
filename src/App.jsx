@@ -4,6 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import TrackerPage from '../components/TrackerPage';
 import SearchPage from '../components/SearchPage';
 import { getTrackerList, addItem, removeItem } from '../util/TrackerTable.js'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   const [trackerList, setTrackerList] = useState([])
@@ -13,7 +14,6 @@ function App() {
       setTrackerList(await getTrackerList());
     }
     loadList();
-    console.log("fire main app");
   }, [])
 
   function addTrackingItem(item){
@@ -25,8 +25,6 @@ function App() {
   }
 
   function checkIfTracked(gameID){
-    trackerList.forEach((item) => {
-    })
     return (trackerList.some((game) => game.fields.gameID === gameID));
   }
 

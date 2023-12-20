@@ -1,46 +1,56 @@
+import { Container, Modal } from 'react-bootstrap'
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import { useState } from 'react'
 import { getGameDetails } from '../util/CheapSharkAPI.js'
+import { Button } from 'react-bootstrap'
 
 export default function GameItem({ item, isTracked, btnFunction }){
     const [gameDetails, setGameDetails] = useState({});
+    const [showModal, setShowModal] = useState(false);
     
-    const onDlgBtnClick = async () => {
+    const showDetails = async () => {
         const response = await getGameDetails(item.gameID);
         setGameDetails(response);
-
-        const dialog = document.querySelector("#modal-" + item.gameID);
-        dialog.showModal();
+        setShowModal(true);
     }
 
-    const onCloseDlgClick = () => {
-        const dialog = document.querySelector("#modal-" + item.gameID);
-        dialog.close();
+    const hideDetails = () => {
+        setShowModal(false);
     }
 
     return (
-        <div>
-            <p>{`Title: ${item.title}`}</p>
-            <p>{`Sale Price: ${item.salePrice}`}</p>
-            <p>{`Normal Price: ${item.normalPrice}`}</p>
-            {!isTracked && <p>{`Steam Rating: ${item.steamRatingText} - ${item.steamRatingPercent}%`}</p>}
+        <Container className='gameItemPad'>
+            <Row md="auto">{`Title: ${item.title}`}</Row>
+            <Row xs="auto">
+                <Col>{`Sale Price: ${item.salePrice}`}</Col>
+                <Col>{`Normal Price: ${item.normalPrice}`}</Col>
+            </Row>
+            {item.steamRatingText && <Row>{`Steam Rating: ${item.steamRatingText} - ${item.steamRatingPercent}%`}</Row>}
             <img src={item.thumb}></img>
-            {<button onClick={() => btnFunction(item)}>{isTracked ? "Remove" : "Track"}</button>}
-            <button onClick={onDlgBtnClick}>More Details</button>
-            <dialog id={`modal-${item.gameID}`} className='modal'>
-                <div className='modal-textbox'>
-                    <h1>Game Details</h1>
-                    <p>{`Title: ${item.title}`}</p>
-                    <img src={item.thumb}></img>
-                    {gameDetails?.deals?.map((detail) => {
-                        return <div key={detail.gameID}>
-                                    <p>{`Store: ${detail.storeID}`}</p>
-                                    <p>{`Sale Price: ${detail.price}`}</p>
-                                    <p>{`Normal Price: ${detail.retailPrice}`}</p>
-                                </div>
-                    })}
-                    <button onClick={onCloseDlgClick}>Close</button>
-                </div>
-            </dialog>
-        </div>
+            {<Button onClick={() => btnFunction(item)}>{isTracked ? "Remove" : "Track"}</Button>}
+            <Button onClick={showDetails}>More Details</Button>
+            <Modal show={showModal} onHide={hideDetails}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Game Details</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Container>
+                        <Row>{`Title: ${item.title}`}</Row>
+                        <Row><img src={item.thumb} /></Row>
+                        {gameDetails?.deals?.map((detail) => {
+                            return <Container key={detail.gameID} className='gameItemDetailPad'>
+                                        <Row>{`Store: ${detail.storeID}`}</Row>
+                                        <Row>{`Sale Price: ${detail.price}`}</Row>
+                                        <Row>{`Normal Price: ${detail.retailPrice}`}</Row>
+                                    </Container>
+                        })}
+                    </Container>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={hideDetails}>Close</Button>
+                </Modal.Footer>
+            </Modal>
+        </Container>
     )
 }
