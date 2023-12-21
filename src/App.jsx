@@ -6,18 +6,22 @@ import SearchPage from '../components/SearchPage';
 import { getTrackerList, addItem, removeItem } from '../util/TrackerTable.js'
 import { getStoreList } from '../util/CheapSharkAPI.js'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container } from 'react-bootstrap'
+import { Container, Col, Row, Spinner } from 'react-bootstrap'
 
 function App() {
   const [trackerList, setTrackerList] = useState([])
   const [storeList, setStoreList] = useState([]);
+  const [showSpinner, setShowSpinner] = useState(false);
 
   useEffect(() => {
+    setShowSpinner(true);
     async function initApp(){
       setTrackerList(await getTrackerList());
       setStoreList(await getStoreList());
+      setShowSpinner(false);
     }
     initApp();
+    
   }, [])
 
   function checkIfTracked(gameID){
@@ -25,7 +29,6 @@ function App() {
   }
 
   function getStoreDetails(storeID){
-    console.log(storeList);
     return (storeList.find((store) => (store.storeID === storeID)));
   }
 
@@ -53,12 +56,19 @@ function App() {
 
   return (
     <Container>
-      <h1 className="header">Steam Discounts Tracker</h1> 
-      <Routes>
-        <Route path="/" element={<TrackerPage trackerList={trackerList} removeTrackingItem={removeTrackingItem} checkIfTracked={checkIfTracked} getStoreDetails={getStoreDetails}/>}/>
-        <Route path="/search" element={<SearchPage addTrackingItem={addTrackingItem} removeTrackingItem={removeTrackingItem} checkIfTracked={checkIfTracked} getStoreDetails={getStoreDetails}/>}/>
-        <Route path="/search/:searchStr" element={<SearchPage addTrackingItem={addTrackingItem}/>}/>
-      </Routes>
+      <Row><h1 className="header">Personal Steam Discounts Tracker</h1> </Row>
+      <Row className="justify-content-md-center">
+        <Col md="auto">
+          {showSpinner && <Spinner animation="border" />}
+        </Col>
+      </Row>
+      {!showSpinner && 
+        <Routes>
+          <Route path="/" element={<TrackerPage trackerList={trackerList} removeTrackingItem={removeTrackingItem} checkIfTracked={checkIfTracked} getStoreDetails={getStoreDetails}/>}/>
+          <Route path="/search" element={<SearchPage addTrackingItem={addTrackingItem} removeTrackingItem={removeTrackingItem} checkIfTracked={checkIfTracked} getStoreDetails={getStoreDetails}/>}/>
+          <Route path="/search/:searchStr" element={<SearchPage addTrackingItem={addTrackingItem}/>}/>
+        </Routes>
+      }
     </Container>
   )
 }

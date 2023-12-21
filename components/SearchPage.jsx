@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Container, Dropdown, Form, Row, Col } from 'react-bootstrap'
+import { Button, ButtonGroup, Container, Dropdown, Form, Row, Col, Spinner } from 'react-bootstrap'
 import { useState, useEffect } from 'react'
 import { Link } from "react-router-dom";
 import GameItem from './GameItem';
@@ -6,6 +6,7 @@ import { getDailyDeals, getFilteredDeals } from '../util/CheapSharkAPI.js'
 
 export default function SearchPage({ addTrackingItem, removeTrackingItem, checkIfTracked, getStoreDetails}){
     const [dealList, setDealList] = useState([])
+    const [showSpinner, setShowSpinner] = useState(false);
     const [titleInput, setTitleInput] = useState("");
     const [usePriceFilter, setUsePriceFilter] = useState(false);
     const [lowerPriceInput, setLowerPriceInput] = useState(0);
@@ -14,9 +15,11 @@ export default function SearchPage({ addTrackingItem, removeTrackingItem, checkI
     const [filterOrder, setFilterOrder] = useState("Ascending");
 
     useEffect(() => {
+        setShowSpinner(true);
         //load daily dails as initial landing page
         async function loadSearch(){
             setDealList(sortDealList(filterType, filterOrder, await getDailyDeals()));
+            setShowSpinner(false);
         }
         loadSearch();
     }, []);
@@ -67,17 +70,22 @@ export default function SearchPage({ addTrackingItem, removeTrackingItem, checkI
         setFilterOrder("Ascending");
     }
 
-    const searchFilter = async () => {
-        let filterStrArray = [];
-        if (titleInput){
-            filterStrArray.push("title=" + titleInput);
+    const searchFilter = () => {
+        setShowSpinner(true);
+        async function search(){
+            let filterStrArray = [];
+            if (titleInput){
+                filterStrArray.push("title=" + titleInput);
+            }
+            if (usePriceFilter){
+                filterStrArray.push("lowerPrice=" + lowerPriceInput + "&upperPrice=" + upperPriceInput);
+            }
+            if (filterStrArray.length > 0){
+                setDealList(sortDealList(filterType, filterOrder, await getFilteredDeals(filterStrArray.join("&"))));
+            }
+            setShowSpinner(false);
         }
-        if (usePriceFilter){
-            filterStrArray.push("lowerPrice=" + lowerPriceInput + "&upperPrice=" + upperPriceInput);
-        }
-        if (filterStrArray.length > 0){
-            setDealList(sortDealList(filterType, filterOrder, await getFilteredDeals(filterStrArray.join("&"))));
-        }
+        search();
     };
 
     const sortDealList = (type, order, list) => {
@@ -133,6 +141,9 @@ export default function SearchPage({ addTrackingItem, removeTrackingItem, checkI
                 <Row xs="auto" className="align-items-center smallRowPadding">
                     <Col><Button className="searchButtonWidth" onClick={clearFilter}>Clear</Button></Col>
                     <Col><Button className="searchButtonWidth" onClick={searchFilter}>Search</Button></Col>
+                    <Col md="auto">
+                        {showSpinner && <Spinner animation="border" />}
+                    </Col>
                 </Row>
             </Container>
             <hr />
