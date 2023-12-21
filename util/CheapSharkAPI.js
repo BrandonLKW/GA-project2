@@ -20,3 +20,10 @@ export async function getGameDetails(gameId){
     const list = await response.json();
     return list;
 }
+
+export async function getStoreList(){
+    const storeUrl = url + "/stores";
+    const response = await fetch(storeUrl);
+    const list = await response.json();
+    return list;
+}

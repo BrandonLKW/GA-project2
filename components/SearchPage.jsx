@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import GameItem from './GameItem';
 import { getDailyDeals, getFilteredDeals } from '../util/CheapSharkAPI.js'
 
-export default function SearchPage({ addTrackingItem, removeTrackingItem, checkIfTracked}){
+export default function SearchPage({ addTrackingItem, removeTrackingItem, checkIfTracked, getStoreDetails}){
     const [dealList, setDealList] = useState([])
     const [titleInput, setTitleInput] = useState("");
     const [usePriceFilter, setUsePriceFilter] = useState(false);
@@ -28,7 +28,12 @@ export default function SearchPage({ addTrackingItem, removeTrackingItem, checkI
     }
 
     const handleLowerPriceInputEvent = (event) => {
-        setLowerPriceInput(event.target.value);
+        if (event.target.value){
+            setLowerPriceInput(event.target.value);
+        } else{
+            setLowerPriceInput(0);
+        }
+        
     };
 
     const handleUpperPriceInputEvent = (event) => {
@@ -36,7 +41,10 @@ export default function SearchPage({ addTrackingItem, removeTrackingItem, checkI
     };
 
     const clearFilter = () => {
-
+        setTitleInput("");
+        setUsePriceFilter(false);
+        setLowerPriceInput(0);
+        setUpperPriceInput(15);
     }
 
     const searchFilter = async () => {
@@ -48,6 +56,7 @@ export default function SearchPage({ addTrackingItem, removeTrackingItem, checkI
             filterStrArray.push("lowerPrice=" + lowerPriceInput + "&upperPrice=" + upperPriceInput);
         }
         if (filterStrArray.length > 0){
+            console.log(filterStrArray.join("&"));
             setDealList(await getFilteredDeals(filterStrArray.join("&")));
         }
     };
@@ -67,14 +76,14 @@ export default function SearchPage({ addTrackingItem, removeTrackingItem, checkI
                     <Col><Form.Control name="titleInput" value={titleInput} onChange={handleTitleInputEvent}/></Col>
                 </Row>
                 <Row xs="auto" className="align-items-center smallRowPadding">
-                    <Col><Form.Label>Filter by Price range:</Form.Label></Col>
-                    <Col><Form.Control name="lowerPriceInput" value={lowerPriceInput} onChange={handleLowerPriceInputEvent}/></Col>
-                    <Col><Form.Label>-</Form.Label></Col>
-                    <Col><Form.Control name="upperPriceInput" value={upperPriceInput} onChange={handleUpperPriceInputEvent}/></Col>
+                    <Col><Form.Label>Filter by sale price range?</Form.Label></Col>
+                    <Col><input value={usePriceFilter} type="checkbox" onChange={handlePriceFilterFlag}/></Col>
                 </Row>
                 <Row xs="auto" className="align-items-center smallRowPadding">
-                    <Col><Form.Label>Filter by price range?</Form.Label></Col>
-                    <Col><input value={usePriceFilter} type="checkbox" onChange={handlePriceFilterFlag}/></Col>
+                    <Col><Form.Label>Filter by Sale Price range:</Form.Label></Col>
+                    <Col><Form.Control name="lowerPriceInput" value={lowerPriceInput} onChange={handleLowerPriceInputEvent} type="number" disabled={!usePriceFilter}/></Col>
+                    <Col><Form.Label>-</Form.Label></Col>
+                    <Col><Form.Control name="upperPriceInput" value={upperPriceInput} onChange={handleUpperPriceInputEvent} type="number" disabled={!usePriceFilter}/></Col>
                 </Row>
                 <Row xs="auto" className="align-items-center smallRowPadding">
                     <Col><Button onClick={clearFilter}>Clear</Button></Col>
@@ -86,9 +95,12 @@ export default function SearchPage({ addTrackingItem, removeTrackingItem, checkI
                 <Row xs="auto" className="smallRowPadding">
                     <h2>Deals:</h2>
                 </Row>
+                {dealList.length <= 0 && 
+                <Row xs="auto">No results found.</Row>}
+                {dealList.length > 0 && 
                 <Row xs={3}>
-                    {dealList.map((deal) => (<GameItem key={deal.gameID} item={deal} isTracked={checkIfTracked(deal.gameID)} btnFunction={checkIfTracked(deal.gameID) ? removeTrackingItem : addTrackingItem}/>))}
-                </Row>
+                    {dealList.map((deal) => (<GameItem key={deal.gameID} item={deal} isTracked={checkIfTracked(deal.gameID)} btnFunction={checkIfTracked(deal.gameID) ? removeTrackingItem : addTrackingItem} getStoreDetails={getStoreDetails}/>))}
+                </Row>}
             </Container>
         </Container>
     )

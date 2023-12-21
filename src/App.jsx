@@ -4,18 +4,30 @@ import { Routes, Route } from 'react-router-dom';
 import TrackerPage from '../components/TrackerPage';
 import SearchPage from '../components/SearchPage';
 import { getTrackerList, addItem, removeItem } from '../util/TrackerTable.js'
+import { getStoreList } from '../util/CheapSharkAPI.js'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container } from 'react-bootstrap'
 
 function App() {
   const [trackerList, setTrackerList] = useState([])
+  const [storeList, setStoreList] = useState([]);
 
   useEffect(() => {
-    async function loadList(){
+    async function initApp(){
       setTrackerList(await getTrackerList());
+      setStoreList(await getStoreList());
     }
-    loadList();
+    initApp();
   }, [])
+
+  function checkIfTracked(gameID){
+    return (trackerList.some((game) => game.fields.gameID === gameID));
+  }
+
+  function getStoreDetails(storeID){
+    console.log(storeList);
+    return (storeList.find((store) => (store.storeID === storeID)));
+  }
 
   function addTrackingItem(item){
     async function add(){
@@ -23,10 +35,6 @@ function App() {
       setTrackerList([newItem, ...trackerList]);
     }
     add();
-  }
-
-  function checkIfTracked(gameID){
-    return (trackerList.some((game) => game.fields.gameID === gameID));
   }
 
   function removeTrackingItem(item){
@@ -47,8 +55,8 @@ function App() {
     <Container>
       <h1 className="header">Steam Discounts Tracker</h1> 
       <Routes>
-        <Route path="/" element={<TrackerPage trackerList={trackerList} removeTrackingItem={removeTrackingItem} checkIfTracked={checkIfTracked}/>}/>
-        <Route path="/search" element={<SearchPage addTrackingItem={addTrackingItem} removeTrackingItem={removeTrackingItem} checkIfTracked={checkIfTracked}/>}/>
+        <Route path="/" element={<TrackerPage trackerList={trackerList} removeTrackingItem={removeTrackingItem} checkIfTracked={checkIfTracked} getStoreDetails={getStoreDetails}/>}/>
+        <Route path="/search" element={<SearchPage addTrackingItem={addTrackingItem} removeTrackingItem={removeTrackingItem} checkIfTracked={checkIfTracked} getStoreDetails={getStoreDetails}/>}/>
         <Route path="/search/:searchStr" element={<SearchPage addTrackingItem={addTrackingItem}/>}/>
       </Routes>
     </Container>

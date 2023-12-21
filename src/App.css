@@ -12,18 +12,33 @@ body {
   vertical-align: middle;
 }
 
-.gameItemPad {
+.gameItem {
   margin-top: 20px;
   margin-bottom: 20px;
+  padding-top: 5%;
+  padding-bottom: 5%;
 }
 
 .gameItemTitle{
   font-size: large;
+  font-weight: bold;
+  text-decoration: underline;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.gameItemImage{
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 .gameItemDetailPad {
   margin-top: 20px;
   margin-bottom: 20px;
+}
+
+.gameItemDetailSubHeader {
+  text-decoration: underline;
 }
 
 .smallRowPadding{
