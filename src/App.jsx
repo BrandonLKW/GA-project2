@@ -5,6 +5,7 @@ import TrackerPage from '../components/TrackerPage';
 import SearchPage from '../components/SearchPage';
 import { getTrackerList, addItem, removeItem } from '../util/TrackerTable.js'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Container } from 'react-bootstrap'
 
 function App() {
   const [trackerList, setTrackerList] = useState([])
@@ -43,14 +44,14 @@ function App() {
   }
 
   return (
-    <>
-      <h1>Steam Discounts Tracker</h1> 
+    <Container>
+      <h1 className="header">Steam Discounts Tracker</h1> 
       <Routes>
         <Route path="/" element={<TrackerPage trackerList={trackerList} removeTrackingItem={removeTrackingItem} checkIfTracked={checkIfTracked}/>}/>
         <Route path="/search" element={<SearchPage addTrackingItem={addTrackingItem} removeTrackingItem={removeTrackingItem} checkIfTracked={checkIfTracked}/>}/>
         <Route path="/search/:searchStr" element={<SearchPage addTrackingItem={addTrackingItem}/>}/>
       </Routes>
-    </>
+    </Container>
   )
 }
 

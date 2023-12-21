@@ -1,4 +1,4 @@
-import { Button, Container } from 'react-bootstrap'
+import { Button, Container, Form, Row, Col } from 'react-bootstrap'
 import { useState, useEffect } from 'react'
 import { Link } from "react-router-dom";
 import GameItem from './GameItem';
@@ -35,6 +35,10 @@ export default function SearchPage({ addTrackingItem, removeTrackingItem, checkI
         setUpperPriceInput(event.target.value);
     };
 
+    const clearFilter = () => {
+
+    }
+
     const searchFilter = async () => {
         let filterStrArray = [];
         if (titleInput){
@@ -50,29 +54,42 @@ export default function SearchPage({ addTrackingItem, removeTrackingItem, checkI
 
     return (
         <Container>
-            <div>
-                <label>
-                    Filter by Title: <input name="titleInput" value={titleInput} onChange={handleTitleInputEvent}/>
-                </label>
-                <br/>   
-                <label>
-                    Filter by Price range: 
-                    <input name="lowerPriceInput" value={lowerPriceInput} onChange={handleLowerPriceInputEvent}/> 
-                    to 
-                    <input name="upperPriceInput" value={upperPriceInput} onChange={handleUpperPriceInputEvent}/>
-                </label>
-                <label>
-                    Filter by price range? <input value={usePriceFilter} type="checkbox" onChange={handlePriceFilterFlag}/>
-                </label>
-                
-                <Button onClick={searchFilter}>Search</Button>
-            </div>
             <Link to="/">
-                <Button>Home</Button>
+                <Button>Return to Tracker</Button>
             </Link>
             <hr />
-            <h2>Deals:</h2>
-            {dealList.map((deal) => (<GameItem key={deal.gameID} item={deal} isTracked={checkIfTracked(deal.gameID)} btnFunction={checkIfTracked(deal.gameID) ? removeTrackingItem : addTrackingItem}/>))}
+            <Container>
+                <Row xs="auto" className="smallRowPadding">
+                    <h2>Search by Filters:</h2>
+                </Row>
+                <Row xs="auto" className="align-items-center smallRowPadding">
+                    <Col><Form.Label className="verticalTextAlign">Filter by Title:</Form.Label></Col>
+                    <Col><Form.Control name="titleInput" value={titleInput} onChange={handleTitleInputEvent}/></Col>
+                </Row>
+                <Row xs="auto" className="align-items-center smallRowPadding">
+                    <Col><Form.Label>Filter by Price range:</Form.Label></Col>
+                    <Col><Form.Control name="lowerPriceInput" value={lowerPriceInput} onChange={handleLowerPriceInputEvent}/></Col>
+                    <Col><Form.Label>-</Form.Label></Col>
+                    <Col><Form.Control name="upperPriceInput" value={upperPriceInput} onChange={handleUpperPriceInputEvent}/></Col>
+                </Row>
+                <Row xs="auto" className="align-items-center smallRowPadding">
+                    <Col><Form.Label>Filter by price range?</Form.Label></Col>
+                    <Col><input value={usePriceFilter} type="checkbox" onChange={handlePriceFilterFlag}/></Col>
+                </Row>
+                <Row xs="auto" className="align-items-center smallRowPadding">
+                    <Col><Button onClick={clearFilter}>Clear</Button></Col>
+                    <Col><Button onClick={searchFilter}>Search</Button></Col>
+                </Row>
+            </Container>
+            <hr />
+            <Container>
+                <Row xs="auto" className="smallRowPadding">
+                    <h2>Deals:</h2>
+                </Row>
+                <Row xs={3}>
+                    {dealList.map((deal) => (<GameItem key={deal.gameID} item={deal} isTracked={checkIfTracked(deal.gameID)} btnFunction={checkIfTracked(deal.gameID) ? removeTrackingItem : addTrackingItem}/>))}
+                </Row>
+            </Container>
         </Container>
     )
 }

@@ -20,37 +20,45 @@ export default function GameItem({ item, isTracked, btnFunction }){
     }
 
     return (
-        <Container className='gameItemPad'>
-            <Row md="auto">{`Title: ${item.title}`}</Row>
-            <Row xs="auto">
-                <Col>{`Sale Price: ${item.salePrice}`}</Col>
-                <Col>{`Normal Price: ${item.normalPrice}`}</Col>
-            </Row>
-            {item.steamRatingText && <Row>{`Steam Rating: ${item.steamRatingText} - ${item.steamRatingPercent}%`}</Row>}
-            <img src={item.thumb}></img>
-            {<Button onClick={() => btnFunction(item)}>{isTracked ? "Remove" : "Track"}</Button>}
-            <Button onClick={showDetails}>More Details</Button>
-            <Modal show={showModal} onHide={hideDetails}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Game Details</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Container>
-                        <Row>{`Title: ${item.title}`}</Row>
-                        <Row><img src={item.thumb} /></Row>
-                        {gameDetails?.deals?.map((detail) => {
-                            return <Container key={detail.gameID} className='gameItemDetailPad'>
-                                        <Row>{`Store: ${detail.storeID}`}</Row>
-                                        <Row>{`Sale Price: ${detail.price}`}</Row>
-                                        <Row>{`Normal Price: ${detail.retailPrice}`}</Row>
-                                    </Container>
-                        })}
-                    </Container>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="primary" onClick={hideDetails}>Close</Button>
-                </Modal.Footer>
-            </Modal>
-        </Container>
+        <Col>
+            <Container className='border border-info rounded gameItemPad'>
+                <Row md="auto" className="smallRowPadding">
+                    <Col className="gameItemTitle">{`${item.title}`}</Col>
+                </Row>
+                <Row><img src={item.thumb}></img></Row>
+                <Row className="smallRowPadding">
+                    <Col>{item.steamRatingText && `Steam Rating: ${item.steamRatingText} - ${item.steamRatingPercent}%`}</Col>
+                </Row>
+                <Row xs="auto" className="smallRowPadding">
+                    <Col>{`Sale Price: ${item.salePrice}`}</Col>
+                    <Col>{`Normal Price: ${item.normalPrice}`}</Col>
+                </Row>
+                <Row xs="auto" className="smallRowPadding">
+                    <Col>{<Button onClick={() => btnFunction(item)}>{isTracked ? "Remove" : "Track"}</Button>}</Col>
+                    <Col><Button onClick={showDetails}>More Details</Button></Col>
+                </Row>
+                <Modal show={showModal} onHide={hideDetails}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Game Details</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Container>
+                            <Row className="gameItemTitle">{`${item.title}`}</Row>
+                            <Row><img src={item.thumb} /></Row>
+                            {gameDetails?.deals?.map((detail) => {
+                                return <Container key={detail.gameID} className='gameItemDetailPad'>
+                                            <Row>{`Store: ${detail.storeID}`}</Row>
+                                            <Row>{`Sale Price: ${detail.price}`}</Row>
+                                            <Row>{`Normal Price: ${detail.retailPrice}`}</Row>
+                                        </Container>
+                            })}
+                        </Container>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="primary" onClick={hideDetails}>Close</Button>
+                    </Modal.Footer>
+                </Modal>
+            </Container>
+        </Col>
     )
 }

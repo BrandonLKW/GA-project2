@@ -11,7 +11,9 @@ export default function TrackerPage({ trackerList, removeTrackingItem, checkIfTr
             <Link to="/search">
                 <Button>Update List</Button>
             </Link>
-            {trackerList.map((item) => (<GameItem key={item.fields.title} item={item.fields} isTracked={checkIfTracked(item.fields.gameID)} btnFunction={removeTrackingItem}/>))}
+            <Row xs={3}>
+              {trackerList.map((item) => (<GameItem key={item.fields.title} item={item.fields} isTracked={checkIfTracked(item.fields.gameID)} btnFunction={removeTrackingItem}/>))}
+            </Row>
         </Container>
     )
 }

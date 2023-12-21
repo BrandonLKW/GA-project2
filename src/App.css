@@ -1,9 +1,32 @@
+body {
+  font-family: 'Crimson Pro', serif;
+}
+
+.header {
+  text-align: center;
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+
+.verticalTextAlign{
+  vertical-align: middle;
+}
+
 .gameItemPad {
   margin-top: 20px;
   margin-bottom: 20px;
 }
 
+.gameItemTitle{
+  font-size: large;
+}
+
 .gameItemDetailPad {
   margin-top: 20px;
   margin-bottom: 20px;
+}
+
+.smallRowPadding{
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
