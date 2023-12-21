@@ -44,9 +44,9 @@ export default function GameItem({ item, isTracked, btnFunction, getStoreDetails
                     <Col>{<Button onClick={() => btnFunction(item)}>{isTracked ? "Remove" : "Track"}</Button>}</Col>
                     <Col><Button onClick={showDetails}>More Details</Button></Col>
                 </Row>
-                <Modal show={showModal} onHide={hideDetails}>
+                <Modal show={showModal} onHide={hideDetails} scrollable="true">
                     <Modal.Header closeButton>
-                        <Modal.Title>Additional Details</Modal.Title>
+                        <Modal.Title>Compared to other stores:</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Container>
@@ -54,7 +54,7 @@ export default function GameItem({ item, isTracked, btnFunction, getStoreDetails
                             <Row><img src={item.thumb} /></Row>
                             {gameDetails?.deals?.map((detail) => {
                                 return <Container key={detail.gameID} className='gameItemDetailPad'>
-                                            <Row xs="auto" className="smallRowPadding gameItemDetailSubHeader">{`Store: ${getStoreDetails(detail.storeID).storeName}`}</Row>
+                                            <Row xs="auto" className="smallRowPadding gameItemDetailSubHeader">{`${getStoreDetails(detail.storeID).storeName}`}</Row>
                                             <Row xs="auto" className="smallRowPadding">{`Sale Price: $${detail.price}`}</Row>
                                             <Row xs="auto" className="smallRowPadding">{`Normal Price: $${detail.retailPrice}`}</Row>
                                             <Row xs="auto" className="smallRowPadding">{`Current Discount of ${getDiscount(detail.retailPrice, detail.price)}%`}</Row>

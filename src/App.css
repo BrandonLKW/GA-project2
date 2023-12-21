@@ -12,6 +12,10 @@ body {
   vertical-align: middle;
 }
 
+.searchButtonWidth{
+  width: 150px;
+}
+
 .gameItem {
   margin-top: 20px;
   margin-bottom: 20px;
@@ -43,5 +47,5 @@ body {
 
 .smallRowPadding{
   margin-top: 5px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
